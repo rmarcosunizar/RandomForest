@@ -3,51 +3,51 @@ title: "Random Forest"
 output: html_notebook
 ---
 
-###IntroducciÛn a Random Forest
+###Introducci√≥n a Random Forest
 
-**Random Forest** es un algoritmo de predicciÛn que utiliza un conjunto de normas binarias para calcular un valor objetivo. Este algoritmo puede ser utilizado para clasificaciÛn (variables categÛrica) o regresiÛn (variables continuas). 
+**Random Forest** es un algoritmo de predicci√≥n que utiliza un conjunto de normas binarias para calcular un valor objetivo. Este algoritmo puede ser utilizado para clasificaci√≥n (variables categ√≥rica) o regresi√≥n (variables continuas). 
 
-El algoritmo **Random Forest** esta basado en el mÈtodo de ·rboles de decisiÛn (CART - *Classification and Regression Trees*).
+El algoritmo **Random Forest** esta basado en el m√©todo de √°rboles de decisi√≥n (CART - *Classification and Regression Trees*).
 
 
-![](/home/marcos/Im·genes/random_forest.png "Ejemplo Random Forest")
+![](/home/marcos/Im√°genes/random_forest.png "Ejemplo Random Forest")
 
-El algoritmo generador de ·rboles:
+El algoritmo generador de √°rboles:
 
   * Determina que variable utilizar para dividir un nodo y el valor a utilizar.
-  * Decide cuando parar (nodo terminal) o continuar la divisiÛn.
-  * Utiliza diferentes aproximaciones para determinar el mejor umbral de separaciÛn en un nodo.
-  * Asigna una clase a cada terminaciÛn.
+  * Decide cuando parar (nodo terminal) o continuar la divisi√≥n.
+  * Utiliza diferentes aproximaciones para determinar el mejor umbral de separaci√≥n en un nodo.
+  * Asigna una clase a cada terminaci√≥n.
 
 
-**Random Forest** es un clasificador de ensamblado (*ensemble classifier*). Este tipo de clasificadores se basan en calibrar varios submodelos, en este caso ·rboles de decisiÛn, y posteriormente agregar los resultados de los distintos modelos para determinar la `predicciÛn final`.
+**Random Forest** es un clasificador de ensamblado (*ensemble classifier*). Este tipo de clasificadores se basan en calibrar varios submodelos, en este caso √°rboles de decisi√≥n, y posteriormente agregar los resultados de los distintos modelos para determinar la `predicci√≥n final`.
 
-Adem·s, RF provee informaciÛn sobre la precisiÛn del modelo y la importancia de las variables predictivas.
+Adem√°s, RF provee informaci√≥n sobre la precisi√≥n del modelo y la importancia de las variables predictivas.
 
 
-###Consideraciones especÌficas de funcionamiento
+###Consideraciones espec√≠ficas de funcionamiento
 
-1. Para cada uno de los ·rboles ajustados en el modelo, e algoritmo selecciona `aleatoriamente` 2/3 del conjunto total de datos (`poblaciÛn`) como muestra de calibraciÛn en sucesivos `pasos` (cada paso representa un ·rbol de decisiÛn) para ajustar el modelo.
+1. Para cada uno de los √°rboles ajustados en el modelo, e algoritmo selecciona `aleatoriamente` 2/3 del conjunto total de datos (`poblaci√≥n`) como muestra de calibraci√≥n en sucesivos `pasos` (cada paso representa un √°rbol de decisi√≥n) para ajustar el modelo.
 
 2. La muestra restante (denominada *Out-Of-Bag* o `OOB`). Esta muestra es usada por el propio algoritmo para medir el `error` y la `importancia de las variables`.
 
-3. La asignaciÛn del valor final (**predicciÛn**) se hace en funciÛn de los `votos` obtenidos de los diferentes ·rboles.
+3. La asignaci√≥n del valor final (**predicci√≥n**) se hace en funci√≥n de los `votos` obtenidos de los diferentes √°rboles.
 
-Cada ·rbol es construido usando el siguiente proceso:
+Cada √°rbol es construido usando el siguiente proceso:
 
-  * Sea†*N*†el numero de casos de prueba,†*M*†es el numero de `variables` en el modelo.
-  * Sea†*m*†el numero de variables de entrada a ser usado para determinar la decisiÛn en un `nodo` dado†($m<M$).
-  * Elegir un conjunto de entrenamiento para este ·rbol y usar el resto de los casos (`OOB`) de prueba para estimar el error.
-  * Para cada `nodo` del ·rbol, elegir aleatoriamente†*m*†variables en las cuales basar la decisiÛn. Calcular la mejor particiÛn a partir de las†*m*†variables del conjunto de entrenamiento.
+  * Sea¬†*N*¬†el numero de casos de prueba,¬†*M*¬†es el numero de `variables` en el modelo.
+  * Sea¬†*m*¬†el numero de variables de entrada a ser usado para determinar la decisi√≥n en un `nodo` dado¬†($m<M$).
+  * Elegir un conjunto de entrenamiento para este √°rbol y usar el resto de los casos (`OOB`) de prueba para estimar el error.
+  * Para cada `nodo` del √°rbol, elegir aleatoriamente¬†*m*¬†variables en las cuales basar la decisi√≥n. Calcular la mejor partici√≥n a partir de las¬†*m*¬†variables del conjunto de entrenamiento.
   
-Para la predicciÛn un nuevo caso es empujado hacia abajo por el ·rbol. Luego se le asigna la etiqueta del nodo terminal donde termina. Este proceso es iterado por todos los arboles en el ensamblado, y la etiqueta que obtenga la mayor cantidad de incidencias es reportada como la predicciÛn.
+Para la predicci√≥n un nuevo caso es empujado hacia abajo por el √°rbol. Luego se le asigna la etiqueta del nodo terminal donde termina. Este proceso es iterado por todos los arboles en el ensamblado, y la etiqueta que obtenga la mayor cantidad de incidencias es reportada como la predicci√≥n.
 
 
 ###Random Forest en R
 
 El paquete `randomForest` provee las funciones para trabajar con modelos Ranfom Forest en R.
 
-Principalmente nos centraremos en usar la funciÛn `randomForest()`, que es la que permite al ajuste de modelos de regresiÛn o clasificaciÛn.
+Principalmente nos centraremos en usar la funci√≥n `randomForest()`, que es la que permite al ajuste de modelos de regresi√≥n o clasificaci√≥n.
 
 ```{r}
 #install.packages('randomForest')
@@ -55,46 +55,43 @@ library(randomForest)
 help(randomForest)
 ```
 
-La sintaxis del argumento `formula` es la misma que la vista en otros modelos de regresiÛn.
+La sintaxis del argumento `formula` es la misma que la vista en otros modelos de regresi√≥n.
 
-No obstante existen otros argumentos especÌficos como:
+No obstante existen otros argumentos espec√≠ficos como:
 
-  * `mtry`: n˙mero de variables consideradas para separar cada nodo.
+  * `mtry`: n√∫mero de variables consideradas para separar cada nodo.
   * `importance`: determina si se calculo o no la importancia de las variables predictivas en el modelo.
-  * `ntree`: n˙mero de ·rboles utilizados para generar la predicciÛn. 
+  * `ntree`: n√∫mero de √°rboles utilizados para generar la predicci√≥n. 
   
   
-###Rescatando el script de regresiÛn espacial
+###Rescatando el script de regresi√≥n espacial
 
-Antes de empezar con **Random Foreest** vamos a recuperar el trabajo previo que hicimos de an·lisis de regresiÛn. Este ser· nuestro punto de partida para empezar con RF. B·sicamente se trata de reemplazar el mÈtodo de `regresiÛn lineal` por `regresiÛn con RF`.
+Antes de empezar con **Random Foreest** vamos a recuperar el trabajo previo que hicimos de an√°lisis de regresi√≥n. Este ser√° nuestro punto de partida para empezar con RF. B√°sicamente se trata de reemplazar el m√©todo de `regresi√≥n lineal` por `regresi√≥n con RF`.
 
 
-####Paso 1. Carga de librerÌas
+####Paso 1. Carga de librer√≠as
 
 ```{r}
 #Librerias para poder trabajar con capas vectoriales y raster
-#install.packages('maptools')
+# install.packages('maptools')
 library(maptools)
-
-#install.packages('raster',dep=TRUE)
+# install.packages('raster')
 library(raster)
+#install.packages('rgdal')
+library(rgdal)
+
 ```
 
 
-####Paso 2. Directorio de trabajo
-
-```{r}
-#Establecemos el directorio de trabajo
-setwd('D:/SALVA/CAMBIO/GEOINNOVA/MODULO4/Practica13')
-```
-
-
-####Paso 3. Lectura de capas raster - Variables independientes
+####Paso 2. Lectura de capas raster - Variables independientes
 
 Ten en cuenta que en este ejemplo las capas raster se encuentran en una carpeta llamada `variables` dentro del directorio de trabajo.
 
 ```{r}
-lista_variables <- list.files(path="variables",pattern='*.txt', full.names=TRUE)
+#Establecemos el directorio de trabajo
+path <- '/media/marcos/Elements/Asignaturas Master TIG/3.6 Modelos parametricos y no parametricos/Regresion_R/Practica_1/variables'
+
+lista_variables <- list.files(path=path,pattern='*.txt', full.names=TRUE)
 lista_variables
 
 ```
@@ -105,3 +102,131 @@ head(variables)
 
 ```
 
+####Paso 3. Lectura de capa Shapefile de estaciones
+
+```{r}
+library(rgdal)
+datos<-readOGR("/media/marcos/Elements/Asignaturas Master TIG/3.6 Modelos parametricos y no parametricos/Regresion_R/Practica_1/","tdatos_jun")
+plot(datos)
+
+```
+
+####Paso 4. Extraer coordenadas, variable dependiente e independientes
+
+```{r}
+#Leer las coordenados de los puntos
+coord<-datos@coords
+
+#Extraer las variables independientes usando las coordendas y las capas raster
+datos_regr<-extract(variables, coord)
+
+#Extraer la variable dependiente y crear el data.frame para la regresi√≥n
+training<-data.frame(cbind(datos_regr,datos$rfo_MES))
+names(training)<-c(names(variables),"rfo_MES")
+
+```
+
+####Paso 5. Ajuste del modelo de regresi√≥n lineal
+
+```{r}
+
+#Ajuste del modelo usando todas las variables independientes
+lm.rfo<-lm(rfo_MES ~ ., data=training)
+summary(lm.rfo)
+
+#Predicci√≥n para crear la capa raster de temperaturas medias
+lm.rfo.pred<-predict(variables, lm.rfo, type="response", index=1, progress="window")
+plot(lm.rfo.pred)
+
+```
+
+###Ahora con Random Forest
+
+B√°sicamente podemos reciclar **TODO** el c√≥digo cambiando √∫nicamente las 2 √∫ltimas instrucciones. Es decir, la funci√≥n para ajustar el modelo, sustituyendo la funci√≥n de `regresi√≥n lineal` por la de `Random Forest`; y el resultado de la predicci√≥n, simplemente para no sobreescribir la predicci√≥n hecha anteriormente:
+
+```{r}
+rfo.rfo<-randomForest(rfo_MES ~ ., data=training, mtry=3, importance=TRUE, ntree=500)
+
+rfo.rfo.pred<-predict(variables, rfo.rfo, type="response", index=1, progress="window")
+plot(lm.rfo.pred)
+
+```
+
+###¬øQu√© modelo funciona mejor?
+
+Vamos a comparar mediante diagramas de dispersi√≥n los 2 modelos:
+
+```{r}
+
+#Obtenemos la predicci√≥n en los puntos de muestreo
+val.lm<-predict(lm.tmed, training)
+val.lm<-cbind(training$Tmed_MES,val.lm)
+  
+#Diagrama de dispersi√≥n de la regresi√≥n lineal
+plot(val.lm[,1],val.lm[,2],main="Regresi√≥n lineal")
+abline(lm(val.lm[,1] ~ val.lm[,2]))
+summary(lm(val.lm[,1] ~ val.lm[,2]))
+
+```
+
+
+```{r}
+
+#Obtenemos la predicci√≥n en los puntos de muestreo
+val.rfo<-predict(rfo.tmed, training)
+val.rfo<-cbind(training$Tmed_MES,val.rfo)
+  
+#Diagrama de dispersi√≥n de la regresi√≥n lineal
+plot(val.rfo[,1],val.rfo[,2],main="Regresi√≥n lineal")
+abline(lm(val.rfo[,1] ~ val.rfo[,2]))
+summary(lm(val.rfo[,1] ~ val.rfo[,2]))
+
+```
+
+
+####¬øY para clasificaci√≥n?
+
+Muy sencillo, basta con que la variable dependiente sea una categoria (`factor`) en lugar de un valor num√©rico.
+
+```{r}
+#CARGA LA LIBRERIAS
+library(randomForest) #RANDOM FOREST
+require(raster)
+
+#LISTADO DE VARIABLES
+lista_variables <- list.files(path="/media/marcos/Elements/Asignaturas Master TIG/3.6 Modelos parametricos y no parametricos/Regresion_R/practica_final/bandas",pattern='*.txt', full.names=TRUE)
+
+lista_variables
+
+variables <- stack(lista_variables)
+
+#IMPORTA LA TABLA DE PRESENCIAS
+datos<-read.table("/media/marcos/Elements/Asignaturas Master TIG/3.6 Modelos parametricos y no parametricos/Regresion_R/practica_final/ifn3_clc_fcc70.csv",header=T, sep=';')
+coord<-datos[,2:3]
+names(coord)<-c("x","y")
+tabla_datos<-extract(variables, coord)
+tabla_clas<-data.frame(cbind(tabla_datos,datos))
+tabla_clas<-subset(tabla_clas, select = -c(POINT_X,POINT_Y))
+tabla_clas[tabla_clas==0] = NA
+tabla_clas<-na.omit(tabla_clas)
+
+```
+
+```{r}
+#AJUSTE DEL MODELO RANDOM FORESTS
+clas_rfo<-randomForest(Nombre ~ ., data=tabla_clas, mtry=3, importance=TRUE, ntree=1800)
+clas_rfo
+
+```
+
+```{r}
+#PREDICCI?N GEOGR?FICA
+clas_rfo_pred<-predict(variables, clas_rfo,type="response", index=1, progress="window")
+plot(clas_rfo_pred)
+
+```
+
+
+####Evaluaci√≥n
+
+Implementa un script de clasificaci√≥n de imagen usando `Random Forest'. Utiliza el c√≥digo del ejemplo anterior para jugar con los par√°metros y optimizar el resultado (minimizar el error OOB).
