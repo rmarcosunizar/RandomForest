@@ -1,0 +1,107 @@
+---
+title: "Random Forest"
+output: html_notebook
+---
+
+###Introducción a Random Forest
+
+**Random Forest** es un algoritmo de predicción que utiliza un conjunto de normas binarias para calcular un valor objetivo. Este algoritmo puede ser utilizado para clasificación (variables categórica) o regresión (variables continuas). 
+
+El algoritmo **Random Forest** esta basado en el método de árboles de decisión (CART - *Classification and Regression Trees*).
+
+
+![](/home/marcos/Imágenes/random_forest.png "Ejemplo Random Forest")
+
+El algoritmo generador de árboles:
+
+  * Determina que variable utilizar para dividir un nodo y el valor a utilizar.
+  * Decide cuando parar (nodo terminal) o continuar la división.
+  * Utiliza diferentes aproximaciones para determinar el mejor umbral de separación en un nodo.
+  * Asigna una clase a cada terminación.
+
+
+**Random Forest** es un clasificador de ensamblado (*ensemble classifier*). Este tipo de clasificadores se basan en calibrar varios submodelos, en este caso árboles de decisión, y posteriormente agregar los resultados de los distintos modelos para determinar la `predicción final`.
+
+Además, RF provee información sobre la precisión del modelo y la importancia de las variables predictivas.
+
+
+###Consideraciones específicas de funcionamiento
+
+1. Para cada uno de los árboles ajustados en el modelo, e algoritmo selecciona `aleatoriamente` 2/3 del conjunto total de datos (`población`) como muestra de calibración en sucesivos `pasos` (cada paso representa un árbol de decisión) para ajustar el modelo.
+
+2. La muestra restante (denominada *Out-Of-Bag* o `OOB`). Esta muestra es usada por el propio algoritmo para medir el `error` y la `importancia de las variables`.
+
+3. La asignación del valor final (**predicción**) se hace en función de los `votos` obtenidos de los diferentes árboles.
+
+Cada árbol es construido usando el siguiente proceso:
+
+  * Sea *N* el numero de casos de prueba, *M* es el numero de `variables` en el modelo.
+  * Sea *m* el numero de variables de entrada a ser usado para determinar la decisión en un `nodo` dado ($m<M$).
+  * Elegir un conjunto de entrenamiento para este árbol y usar el resto de los casos (`OOB`) de prueba para estimar el error.
+  * Para cada `nodo` del árbol, elegir aleatoriamente *m* variables en las cuales basar la decisión. Calcular la mejor partición a partir de las *m* variables del conjunto de entrenamiento.
+  
+Para la predicción un nuevo caso es empujado hacia abajo por el árbol. Luego se le asigna la etiqueta del nodo terminal donde termina. Este proceso es iterado por todos los arboles en el ensamblado, y la etiqueta que obtenga la mayor cantidad de incidencias es reportada como la predicción.
+
+
+###Random Forest en R
+
+El paquete `randomForest` provee las funciones para trabajar con modelos Ranfom Forest en R.
+
+Principalmente nos centraremos en usar la función `randomForest()`, que es la que permite al ajuste de modelos de regresión o clasificación.
+
+```{r}
+#install.packages('randomForest')
+library(randomForest)
+help(randomForest)
+```
+
+La sintaxis del argumento `formula` es la misma que la vista en otros modelos de regresión.
+
+No obstante existen otros argumentos específicos como:
+
+  * `mtry`: número de variables consideradas para separar cada nodo.
+  * `importance`: determina si se calculo o no la importancia de las variables predictivas en el modelo.
+  * `ntree`: número de árboles utilizados para generar la predicción. 
+  
+  
+###Rescatando el script de regresión espacial
+
+Antes de empezar con **Random Foreest** vamos a recuperar el trabajo previo que hicimos de análisis de regresión. Este será nuestro punto de partida para empezar con RF. Básicamente se trata de reemplazar el método de `regresión lineal` por `regresión con RF`.
+
+
+####Paso 1. Carga de librerías
+
+```{r}
+#Librerias para poder trabajar con capas vectoriales y raster
+#install.packages('maptools')
+library(maptools)
+
+#install.packages('raster',dep=TRUE)
+library(raster)
+```
+
+
+####Paso 2. Directorio de trabajo
+
+```{r}
+#Establecemos el directorio de trabajo
+setwd('D:/SALVA/CAMBIO/GEOINNOVA/MODULO4/Practica13')
+```
+
+
+####Paso 3. Lectura de capas raster - Variables independientes
+
+Ten en cuenta que en este ejemplo las capas raster se encuentran en una carpeta llamada `variables` dentro del directorio de trabajo.
+
+```{r}
+lista_variables <- list.files(path="variables",pattern='*.txt', full.names=TRUE)
+lista_variables
+
+```
+
+```{r}
+variables <- stack(lista_variables)
+head(variables)
+
+```
+
